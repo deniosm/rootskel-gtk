@@ -1,14 +1,47 @@
-Source: rootskel-gtk
-Section: debian-installer
+Source: init-system-helpers
+Section: admin
 Priority: optional
+XSBC-Original-Maintainer: Debian systemd Maintainers <pkg-systemd-maintainers@lists.alioth.debian.org>
 Maintainer: Denis Maslo <denios-linux@proton.me>
 Uploaders: Denis Maslo <denios-linux@proton.me>
-Build-Depends: debhelper-compat (=13), dpkg-dev (>= 1.17.27), librsvg2-bin
+Build-Depends: debhelper-compat (= 13),
+               perl:any,
+               python3-docutils
 Standards-Version: 4.5.1
-Rules-Requires-Root: no
 
-Package: rootskel-gtk
-Package-Type: udeb
+Package: init-system-helpers
+Architecture: all
+Priority: required
+Essential: yes
+Multi-Arch: foreign
+Depends: perl-base (>= 5.20.1-3),
+         ${misc:Depends},
+         ${perl:Depends},
+Conflicts: file-rc (<< 0.8.17~),
+Description: helper tools for all init systems
+ This package contains helper tools that are necessary for switching between
+ the various init systems that Debian contains (e. g. sysvinit or
+ systemd). An example is deb-systemd-helper, a script that enables systemd unit
+ files without depending on a running systemd.
+ .
+ It also includes the "service", "invoke-rc.d", and "update-rc.d" scripts which
+ provide an abstraction for enabling, disabling, starting, and stopping
+ services for all supported Debian init systems as specified by the policy.
+ .
+ While this package is maintained by pkg-systemd-maintainers, it is NOT
+ specific to systemd at all. Maintainers of other init systems are welcome to
+ include their helpers in this package.
+
+Package: init
+Section: metapackages
 Architecture: any
-Depends: ${misc:Depends}, rootskel
-Description: graphics for use in debian-installer (gtk user interface)
+Priority: important
+XB-Important: yes
+Multi-Arch: foreign
+Pre-Depends: systemd-sysv [linux-any] ${alt:sysvinit},
+Depends: init-system-helpers (>= 1.25),
+         ${misc:Depends},
+Description: metapackage ensuring an init system is installed
+ This package is a metapackage which allows you to select from the available
+ init systems while ensuring that one of these is available on the system at
+ all times.

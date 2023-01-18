@@ -1,1 +1,2 @@
-debian/templates
+script/*.1p
+man8/*.8
